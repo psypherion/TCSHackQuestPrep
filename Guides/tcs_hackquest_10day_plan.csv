@@ -1,0 +1,11 @@
+Day,Date,Focus Area,Tasks,Time Required
+Day 1,2025-11-27,Foundation & Environment Setup,Setup + Basic CTF,8-10 hours
+Day 2,2025-11-28,Web Security Basics,"SQL Injection, XSS, Command Injection",8-10 hours
+Day 3,2025-11-29,Cryptography & Network,"Crypto basics, Network protocols",8-10 hours
+Day 4,2025-11-30,Binary & Reverse Engineering,"Binary analysis, Assembly",8-10 hours
+Day 5,2025-12-01,Digital Forensics,"File analysis, Steganography",8-10 hours
+Day 6,2025-12-02,Threat Hunting & IR,"SOC, SIEM, Malware analysis",8-10 hours
+Day 7,2025-12-03,Full CTF Simulation 1,"Mixed challenges, Report writing",10-12 hours
+Day 8,2025-12-04,Full CTF Simulation 2,Advanced challenges,10-12 hours
+Day 9,2025-12-05,Weak Areas & Speed,"Review, Speed drills, Mock CTF",10-12 hours
+Day 10,2025-12-06,Final Review & Rest,"Light review, Mental prep",4-6 hours

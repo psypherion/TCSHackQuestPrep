@@ -1,0 +1,12 @@
+<!-- save as favicon.svg -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <rect width="64" height="64" rx="16" fill="#21808d"/>
+  <g>
+    <ellipse cx="32" cy="34" rx="16" ry="20" fill="#fff" stroke="#1d747f" stroke-width="3"/>
+    <path d="M40 34a8 8 0 1 1-16 0v-6a8 8 0 0 1 16 0v6z" fill="#21808d"/>
+    <rect x="28" y="40" width="8" height="14" rx="2" fill="#21808d"/>
+    <polyline points="36,54 40,60 45,56" fill="none" stroke="#fdc622" stroke-width="3" />
+  </g>
+  <text x="47" y="57" font-size="14" font-weight="bold" fill="#fdc622" font-family="Arial">Q</text>
+</svg>
+
