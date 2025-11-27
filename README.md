@@ -4,6 +4,8 @@ A comprehensive web application to prepare for TCS HackQuest cybersecurity compe
 
 ## 🚀 Quick Start
 
+Visit : ```https://www.tcshackquest.com/dashboard```
+
 ### Prerequisites
 - A modern web browser (Chrome, Firefox, Safari, Edge)
 - Python 3 or PHP (built into macOS) for local server
