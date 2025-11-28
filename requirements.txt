@@ -1,0 +1,17 @@
+pwntools
+requests
+beautifulsoup4
+pycryptodome
+z3-solver
+angr
+frida-tools
+scapy
+paramiko
+impacket
+crawl4ai
+opencv-python
+base58
+pillow
+ipython
+ipykernel
+volatility3
